@@ -1,0 +1,85 @@
+To save three ArrayLists, each of size 104, with timestamps in Android Studio using Kotlin, you can utilize SharedPreferences. Here's an example of how you can achieve this:
+
+1. Initialize the ArrayLists with sample data or data specific to your use case.
+
+```kotlin
+val arrayList1 = ArrayList<String>(104)
+val arrayList2 = ArrayList<Int>(104)
+val arrayList3 = ArrayList<Double>(104)
+
+// Populate the ArrayLists with data
+// ...
+
+// Add elements to the ArrayLists
+arrayList1.add(...)
+arrayList2.add(...)
+arrayList3.add(...)
+```
+
+2. Create a function to save the ArrayLists with timestamps using SharedPreferences.
+
+```kotlin
+fun saveArrayListsWithTimestamps() {
+    val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+
+    // Convert the ArrayLists to JSON strings
+    val gson = Gson()
+    val arrayList1Json = gson.toJson(arrayList1)
+    val arrayList2Json = gson.toJson(arrayList2)
+    val arrayList3Json = gson.toJson(arrayList3)
+
+    // Save the JSON strings with timestamps as key-value pairs
+    val timestamp = System.currentTimeMillis()
+    editor.putString("arrayList1_$timestamp", arrayList1Json)
+    editor.putString("arrayList2_$timestamp", arrayList2Json)
+    editor.putString("arrayList3_$timestamp", arrayList3Json)
+
+    editor.apply()
+}
+```
+
+3. Whenever you want to save the ArrayLists, call the `saveArrayListsWithTimestamps()` function.
+
+```kotlin
+saveArrayListsWithTimestamps()
+```
+
+This will save the three ArrayLists with timestamps as key-value pairs in SharedPreferences.
+
+To retrieve the ArrayLists, you can implement a function that retrieves the key-value pairs and parses the JSON strings back into ArrayLists:
+
+```kotlin
+fun retrieveArrayListsWithTimestamps(): List<Triple<String, ArrayList<String>, Long>> {
+    val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+
+    val gson = Gson()
+    val allEntries = sharedPreferences.all
+
+    val arrayListsWithTimestamps = mutableListOf<Triple<String, ArrayList<String>, Long>>()
+
+    for (entry in allEntries) {
+        val key = entry.key
+        val value = entry.value as String
+
+        if (key.startsWith("arrayList1_") || key.startsWith("arrayList2_") || key.startsWith("arrayList3_")) {
+            val timestamp = key.substringAfterLast("_").toLong()
+
+            val arrayList = when {
+                key.startsWith("arrayList1_") -> gson.fromJson(value, object : TypeToken<ArrayList<String>>() {}.type)
+                key.startsWith("arrayList2_") -> gson.fromJson(value, object : TypeToken<ArrayList<Int>>() {}.type)
+                key.startsWith("arrayList3_") -> gson.fromJson(value, object : TypeToken<ArrayList<Double>>() {}.type)
+                else -> continue
+            }
+
+            arrayListsWithTimestamps.add(Triple(key, arrayList, timestamp))
+        }
+    }
+
+    return arrayListsWithTimestamps
+}
+```
+
+This function retrieves all key-value pairs from SharedPreferences and filters the entries based on the keys' prefixes. It then parses the JSON strings back into the respective ArrayList types and returns a list of Triples containing the key, ArrayList, and timestamp.
+
+Remember to adjust the code according to your specific needs, such as handling data types, modifying the SharedPreferences key names, and adapting the code to your application's architecture.

@@ -1,0 +1,71 @@
+
+        try{
+            for(i in 0..103){
+
+                var a = 0.15+(xDataArray.get(i)*0.095)
+
+                if(a<0.88){
+                    var b = 0.14
+
+                    if(b<=0.91){
+                        b+=(yDataArray.get(i)*0.07)
+                    }
+                    else{
+                        b+=(yDataArray.get(i)*0.04)
+                    }
+                    if(b<1.0){
+                        val value = (valueDataArray.get(i))
+
+                        //TO SHOW THE COORDINATES
+
+                        val pt = HeatMap.DataPoint(a.toFloat(),b.toFloat(),1000.00)
+                        heatMap.setRadius(100.0) //to check the points
+                        heatMap.addData(pt)
+//
+//                            if((a in 0.3..0.5) && (b in 0.84..0.88)) {
+//                                //heel
+//                                val heel = HeatMap.DataPoint(a.toFloat(), b.toFloat(), 700.00)
+//                                heatMap.setRadius(200.0) //to check the points
+//                                heatMap.addData(heel)
+//                            }
+//                            else if((a in 0.4825..0.815) && (b in 0.33..0.88)){
+//                                //lateral
+//                                val lat = HeatMap.DataPoint(a.toFloat(),b.toFloat(),8.00)
+//                                heatMap.setMaxDrawingHeight(100)
+//                                heatMap.setRadius(2000.0) //to check the points
+//                                heatMap.addData(lat)
+//                            }
+//                            else if((a in 0.155..0.25) && (b in 0.25..0.36)){
+//                                //forefoot1
+//                                val forefoot1 = HeatMap.DataPoint(a.toFloat(),b.toFloat(),1000.00)
+//                                heatMap.setRadius(200.0) //to check the points
+//                                heatMap.addData(forefoot1)
+//
+//                            }
+//                            else if((a in 0.65..0.78) && (b in 0.25..0.36)){
+//                                //forefoot2
+//                                val forefoot2 = HeatMap.DataPoint(a.toFloat(),b.toFloat(),1000.00)
+//                                heatMap.setRadius(200.0) //to check the points
+//                                heatMap.addData(forefoot2)
+//
+//                            }
+//                            else if((a in 0.5..0.6) && (b in 0.25..0.36)){
+//                                //forefootM
+//                                val forefootM = HeatMap.DataPoint(a.toFloat(),b.toFloat(),8.00)
+//                                heatMap.setRadius(100.0) //to check the points
+//                                heatMap.addData(forefootM)
+//
+//                            }
+
+
+
+                    }
+
+
+
+                }
+            }
+        }finally {
+            heatMap.forceRefresh()
+        }
+//        adding data to the heatmap
